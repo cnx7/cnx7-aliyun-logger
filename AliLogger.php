@@ -87,6 +87,20 @@ class AliLogger {
      * @param null $page_num int 页码
      * @param null $page_size int 每页条数
      * @return \Aliyun_Log_Models_GetLogsResponse|null
+     *
+     * Exp:
+     * $query = '*';
+     * $start_time = time() - 86400;
+     * $end_time = time();
+     *
+     * $client = new AliLogger($args);
+     * $res = $client->search($start_time, $end_time, $query, null, null);
+     *
+     * $count = $res->getCount();
+     * $is_completed = $res->isCompleted();
+     * $logs = $res->getLogs();
+     *
+     * foreach ($logs as $log) var_dump($log->getContents());
      */
     public function search($start_time, $end_time, $query, $page_num = null, $page_size = null) {
         $res = NULL;
