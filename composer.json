@@ -1,0 +1,19 @@
+{
+    "name": "cnx7/aliyun-logger",
+    "description": "aliyun-logger ali-sls",
+    "keywords": [
+        "cnx7-aliyun-logger"
+    ],
+    "license": "Apache-2.0",
+    "config": {
+        "preferred-install": "dist"
+    },
+    "require": {
+        "php": "^5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "cnx7\\AliLogger\\": "./"
+        }
+    }
+}
