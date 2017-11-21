@@ -9,7 +9,7 @@
         "preferred-install": "dist"
     },
     "require": {
-        "php": "^5.4"
+        "php": ">=5.4.0"
     },
     "autoload": {
         "psr-4": {
