@@ -29,10 +29,18 @@ class AliLogger {
         $this->client = new \Aliyun_Log_Client($this->endpoint, $this->accessKeyId, $this->accessKey, $this->token);
     }
 
+    /**
+     * 批量添加开始
+     */
     public function begin() {
         $this->falg = 1;
     }
 
+    /**
+     * 提交到SLS
+     * @return \Aliyun_Log_Models_PutLogsResponse
+     * @throws \Exception
+     */
     public function commit() {
 
         $request = new \Aliyun_Log_Models_PutLogsRequest($this->project, $this->logstore, $this->topic, null, $this->logitems);
@@ -49,11 +57,18 @@ class AliLogger {
         }
     }
 
+    /**
+     * 批量添加取消
+     */
     public function rollback() {
         $this->logitems = [];
         $this->falg = 0;
     }
 
+    /**
+     * 添加日志 没有批量标记则自动提交
+     * @param array $arr
+     */
     public function log($arr = []) {
         $logItem = new \Aliyun_Log_Models_LogItem();
         $logItem->setTime(time());
@@ -62,6 +77,25 @@ class AliLogger {
         if ($this->falg === 0) {
             $this->commit();
         }
+    }
+
+    /**
+     * 查询日志
+     * @param $start_time int 开始时间
+     * @param $end_time int 结束时间
+     * @param $query string 过滤条件
+     * @param null $page_num int 页码
+     * @param null $page_size int 每页条数
+     * @return \Aliyun_Log_Models_GetLogsResponse|null
+     */
+    public function search($start_time, $end_time, $query, $page_num = null, $page_size = null) {
+        $res = NULL;
+        while (is_null($res) || (!$res->isCompleted())) {
+            $req = new \Aliyun_Log_Models_GetLogsRequest($this->project, $this->logstore, $start_time, $end_time, $this->topic, $query, $page_size, ($page_num - 1) * $page_size, False);
+            $res = $this->client->getLogs($req);
+        }
+
+        return $res;
     }
 
 }
